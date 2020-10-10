@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>HuffPress</title>
+	<link rel="shortcut icon" href="favicon.ico">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+	<link rel="stylesheet" href="style.css">
+	<script src="http://code.jquery.com/jquery-latest.min.js"></script>
+</head>
+<body>
+	<header>
+		<h1>HuffPress</h1>
+	</header>
+	<main>
+		<h2>Compress your files with the Huffman compression!</h2>
+		<form id="form" class="was-validated" method="post" enctype="multipart/form-data">
+			<div class="form-group">
+				<label for="mode">Select mode</label>
+				<select id="mode" class="form-control" id="mode">
+					<option value="compress">Compress</option>
+					<option value="decompress">Decompress</option>
+				</select>
+			</div>
+			<div class="form-group">
+				<div class="custom-file">
+					<label class="custom-file-label" for="file">Choose file...</label>
+					<input id="file" type="file" class="custom-file-input" required>
+					<div class="invalid-feedback">Let's choose your file!</div>
+					<div class="valid-feedback">Ready to start!</div>
+				</div>
+			</div>
+			<div class="form-group">
+				<input id="submit" type="submit" class="btn btn-primary" value="HuffPress!">
+			</div>
+		</form>
+	</main>
+	<div class="wrap">
+		<div class="process"><img src="processing.gif" alt="Processing..."></div>
+		<div class="complete">
+			<h3>Completed!</h3>
+			<p class="status"></p>
+			<div class="btncont">
+				<a id="dlink" class="btn btn-primary" href="" download>Download</a>
+				<button class="btn closebtn">Close</button>
+			</div>
+		</div>
+		<div class="error">
+			<h3>Error!</h3>
+			<p class="status">Unable to decompress this file!</p>
+			<div class="btncont">
+				<button class="btn closebtn">Close</button>
+			</div>
+		</div>
+	</div>
+	<script src="script.js"></script>
+</body>
+</html>
