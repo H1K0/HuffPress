@@ -1,11 +1,12 @@
 @import url('https://fonts.googleapis.com/css2?family=Epilogue&family=Secular+One&display=swap');
-html,body{
+html,
+body {
 	width: 100%;
 	min-height: 100vh;
 	margin: 0;
 	padding: 0;
 }
-body{
+body {
 	position: absolute;
 	left: 0;
 	right: 0;
@@ -15,16 +16,16 @@ body{
 	flex-direction: column;
 	justify-content: center;
 	align-items: center;
-	background-image: url(bg.webp);
+	background-image: url(./images/bg.webp);
 	background-size: cover;
 }
-header{
+header {
 	margin: 0;
 	margin-top: 2vw;
 	padding: 0;
 	text-align: center;
 }
-h1{
+h1 {
 	margin: 0;
 	padding: 0;
 	color: white;
@@ -33,21 +34,21 @@ h1{
 	text-shadow: 0 0 1vw black;
 	cursor: default;
 }
-main{
+main {
 	display: none;
 	margin-bottom: 2vw;
 	background-color: #fff8;
-	box-shadow: 0 0 .5vw black;
+	box-shadow: 0 0 0.5vw black;
 	border-radius: 1.5vw;
 	min-height: 9vw;
-	transition: .3s;
+	transition: 0.3s;
 	overflow: hidden;
 }
-main:hover{
+main:hover {
 	background-color: #fff;
 	box-shadow: 0 0 1vw black;
 }
-h2{
+h2 {
 	margin: 0;
 	padding: 0 2vw;
 	height: 9vw;
@@ -55,14 +56,14 @@ h2{
 	flex-direction: column;
 	justify-content: center;
 	align-items: center;
-	background-color: hsla(270,80%,80%,.6);
+	background-color: hsla(270, 80%, 80%, 0.6);
 	border-bottom: 0;
 	font-family: Secular One;
 	font-size: 3vw;
-	text-shadow: 2.5px 2px .5px white;
+	text-shadow: 2.5px 2px 0.5px white;
 	cursor: pointer;
 }
-form{
+form {
 	display: flex;
 	flex-direction: column;
 	justify-content: center;
@@ -71,7 +72,7 @@ form{
 	padding: 2vw 2vw;
 	box-sizing: border-box;
 }
-.wrap{
+.wrap {
 	display: none;
 	position: absolute;
 	left: 0;
@@ -83,7 +84,9 @@ form{
 	align-items: center;
 	z-index: 10;
 }
-.process,.complete,.error{
+.process,
+.complete,
+.error {
 	display: none;
 	padding: 2vw 5vw;
 	background-color: white;
@@ -92,28 +95,28 @@ form{
 	font-size: 5vw;
 	cursor: default;
 }
-.process img{
+.process img {
 	width: 15vw;
 }
-h3{
+h3 {
 	margin: 0;
-	margin-top: .5vw;
+	margin-top: 0.5vw;
 	font-family: Secular One;
 	font-size: 3vw;
 }
-.status{
+.status {
 	margin: 0;
-	margin-top: .5vw;
+	margin-top: 0.5vw;
 	font-family: monospace;
 	font-size: 1.5vw;
 }
-.btncont{
+.btncont {
 	margin: 0;
 	padding: 0;
 }
-.btncont *{
+.btncont * {
 	font-size: 2vw;
 }
-#dlink{
+#dlink {
 	margin-right: 1vw;
 }
