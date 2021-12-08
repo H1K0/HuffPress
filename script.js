@@ -1,55 +1,55 @@
 function winsize() {
 	if (
-		(!toggled && $(window).width() / $(window).height() > 90 / 31) ||
-		(toggled && $(window).width() / ($(window).height() - 219) > 18 / 7)
+		(!toggled && $(window).width() / $(window).height() > 90/31) ||
+		(toggled && $(window).width() / ($(window).height()-219) > 18/7)
 	) {
-		$('body').css('justify-content', 'flex-start')
+		$('body').css('justify-content', 'flex-start');
 	} else {
-		$('body').css('justify-content', 'center')
+		$('body').css('justify-content', 'center');
 	}
-}
-window.onload = function () {
+};
+$(window).on('load', function () {
 	setTimeout(() => {
-		$('main').slideDown(500)
-	}, 100)
-	winsize()
-}
+		$('main').slideDown(500);
+	}, 100);
+	winsize();
+});
 $(window).on('resize', function () {
-	winsize()
-})
+	winsize();
+});
 
-var toggled = false
+var toggled = false;
 $('h2').click(function () {
-	var time = 300
+	var time = 300;
 	if (toggled) {
-		$('form').slideUp(time)
-		$('main').css('min-height', '9vw')
+		$('form').slideUp(time);
+		$('main').css('min-height', '9vw');
 		setTimeout(() => {
-			$('h2').css('border-bottom', '0')
-		}, time)
-		toggled = false
-		winsize()
+			$('h2').css('border-bottom', '0');
+		}, time);
+		toggled = false;
+		winsize();
 	} else {
-		$('main').css('min-height', 'calc(9vw + 260px)')
-		$('form').slideDown(time)
-		$('form').css('display', 'flex')
-		$('h2').css('border-bottom', '1px solid black')
-		toggled = true
+		$('main').css('min-height', 'calc(9vw + 260px)');
+		$('form').slideDown(time);
+		$('form').css('display', 'flex');
+		$('h2').css('border-bottom', '1px solid black');
+		toggled = true;
 		setTimeout(() => {
-			winsize()
-		}, time)
-	}
-})
+			winsize();
+		}, time);
+	};
+});
 
 $('form').on('submit', function submit(e) {
-	e.preventDefault()
-	$('.wrap').css('display', 'flex')
-	$('.process').css('display', 'block')
-	var form = new FormData()
-	form.append('mode', $('#mode').val())
+	e.preventDefault();
+	$('.wrap').css('display', 'flex');
+	$('.process').css('display', 'block');
+	var form = new FormData();
+	form.append('mode', $('#mode').val());
 	$.each($('#file')[0].files, function (i, file) {
-		form.append('file', file)
-	})
+		form.append('file', file);
+	});
 	$.ajax({
 		url: 'huffpress.php',
 		type: 'POST',
@@ -58,7 +58,6 @@ $('form').on('submit', function submit(e) {
 		dataType: 'json',
 		data: form,
 		success: function (resp) {
-			console.log(resp)
 			if (resp.status) {
 				$('.process').css('display', 'none')
 				$('.complete').css('display', 'block')
@@ -75,14 +74,14 @@ $('form').on('submit', function submit(e) {
 			} else {
 				$('.process').css('display', 'none')
 				$('.error').css('display', 'block')
-			}
+			};
 		},
-	})
-})
+	});
+});
 
 $('.closebtn').click(function () {
-	$('.wrap').css('display', 'none')
-	$('.process').css('display', 'none')
-	$('.error').css('display', 'none')
-	$('.complete').css('display', 'none')
-})
+	$('.wrap').css('display', 'none');
+	$('.process').css('display', 'none');
+	$('.error').css('display', 'none');
+	$('.complete').css('display', 'none');
+});

@@ -32,7 +32,8 @@ def huffman(data):
             units[c] += 1
         else:
             units[c] = 1
-    units, codes = sorted([([u], units[u]) for u in units], key=lambda u: u[1]), dict.fromkeys(units.keys(), '')
+    codes = dict.fromkeys(units.keys(), '')
+    units = sorted([([u], units[u]) for u in units], key=lambda u: u[1])
 
     while units:  # creating Haffman table
         if len(units) > 2:
@@ -53,7 +54,7 @@ def huffman(data):
     return codes
 
 
-def tbl(table):
+def nanako_encode(table):
     table = ';'.join([f'{k};{table[k]}' for k in table]).split(';')
     byts = []
     for i in range(len(table)):
@@ -69,7 +70,7 @@ def tbl(table):
     return byts
 
 
-def detbl(byts):
+def nanako_decode(byts):
     dec = []
     table = {}
     stack = ''
@@ -95,7 +96,7 @@ def compress_file(filename):
     log.log(f'Original size: {len(data)} bytes.')
     log.log('Creating Huffman table...')
     hf = huffman(data)
-    table = tbl(hf)
+    table = nanako_encode(hf)
     log.log('Embedding Huffman table...')
     out = []
     ln = bin(len(table))[2:]  # embed the table
@@ -139,7 +140,7 @@ def decompress_file(filename):
             break
         i += 1
     del data[:i + 2]
-    table = detbl(data[:int(ln, 2)])
+    table = nanako_decode(data[:int(ln, 2)])
     del data[:int(ln, 2)]
     data = ''.join(data)
     stack = ''
