@@ -109,7 +109,7 @@ def shichiro_decode(byts):
 
 
 def compress_file(filename):
-    global output
+    global log, output
     log.log(f"Loading '{filename}'...")
     with open(filename, 'rb') as file:  # get data
         data = list(map(int, file.read()))
@@ -143,7 +143,7 @@ def compress_file(filename):
 
 
 def decompress_file(filename):
-    global output
+    global log, output
     log.log(f"Loading '{filename}'...")
     with open(filename, 'rb') as file:  # get data
         data = [bin(byte)[2:].rjust(8, '0') for byte in file.read()]
@@ -188,7 +188,7 @@ def decompress_file(filename):
 @click.argument('files', nargs=-1, metavar='<file [file [...]]>')
 @click.option('-c/-d', 'comp', default=True, help='Compress/decompress mode selectors.')
 def CLI(files, comp):
-    global output
+    global log, output
     log.log(f'hfm {"-c" * comp}{"-d" * (not comp)} "' + "\" \"".join(files) + '"')
     for file in files:
         output += '{'

@@ -58,7 +58,7 @@ $('form').on('submit', function submit(e) {
 		dataType: 'json',
 		data: form,
 		success: function (resp) {
-			if (resp===null) {
+			if (resp === null) {
 				$('.process').css('display', 'none');
 				$('.error').css('display', 'block');
 			} else if (resp.status) {
