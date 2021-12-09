@@ -2,6 +2,7 @@ from os.path import dirname, basename, join, abspath as path
 from time import time
 from datetime import datetime as dt
 import click
+from urllib.parse import quote as url
 
 
 class Log:
@@ -23,6 +24,7 @@ class Log:
 
 
 log = Log(join(dirname(__file__), 'hfm.log'), 'hfm-py')
+output = ''
 
 
 def huffman(data):
@@ -107,6 +109,7 @@ def shichiro_decode(byts):
 
 
 def compress_file(filename):
+    global output
     log.log(f"Loading '{filename}'...")
     with open(filename, 'rb') as file:  # get data
         data = list(map(int, file.read()))
@@ -135,11 +138,12 @@ def compress_file(filename):
     with open(f'{filename}.hfm', 'wb') as file:  # save Haffman code
         file.write(bytes(out))
     log.log('SUCCESSFULLY COMPRESSED')
-    print(f'"origSize":{len(data)},')
-    print(f'"compSize":{len(out)},')
+    output += f'"origSize":{len(data)},'
+    output += f'"compSize":{len(out)},'
 
 
 def decompress_file(filename):
+    global output
     log.log(f"Loading '{filename}'...")
     with open(filename, 'rb') as file:  # get data
         data = [bin(byte)[2:].rjust(8, '0') for byte in file.read()]
@@ -170,39 +174,45 @@ def decompress_file(filename):
         if stack in table:
             out.append(int(table[stack]))
             stack = ''
-    filename = filename[:-4]
+    if filename[-4:] == '.hfm':
+        filename = filename[:-4]
     log.log(f"Saving to '{filename}'...")
     with open(f'{filename}', 'wb') as file:  # save decoded data
         file.write(bytes(out))
     log.log(f'SUCCESSFULLY DECOMPRESSED')
-    print(f'"compSize":{os},')
-    print(f'"origSize":{len(out)},')
+    output += f'"compSize":{os},'
+    output += f'"origSize":{len(out)},'
 
 
 @click.command(options_metavar='[-c / -d]')
 @click.argument('files', nargs=-1, metavar='<file [file [...]]>')
 @click.option('-c/-d', 'comp', default=True, help='Compress/decompress mode selectors.')
 def CLI(files, comp):
-    log.log(f'hfm {"-c" * comp}{"-d" * (not comp)} {" ".join(files)}')
+    global output
+    log.log(f'hfm {"-c" * comp}{"-d" * (not comp)} "' + "\" \"".join(files) + '"')
     for file in files:
-        print('{')
+        output += '{'
         stime = time()
         if comp:
-            compress_file(path(file))
-            wtime = time() - stime
-            print('"status":true,')
-            print(f'"time":{round(wtime, 3)},')
-            print(f'"dlink":"./files/{basename(file) + ".hfm"}"')
+            try:
+                compress_file(path(file))
+                wtime = time() - stime
+                output += '"status":true,'
+                output += f'"time":{round(wtime, 3)},'
+                output += f'"dlink":"./files/{url(basename(file)) + ".hfm"}"'
+            except Exception as e:
+                output += f'"status":false'
         else:
             try:
                 decompress_file(path(file))
                 wtime = time() - stime
-                print('"status":true,')
-                print(f'"time":{round(wtime, 3)},')
-                print(f'"dlink":"./files/{basename(file)[:-4]}"')
+                output += '"status":true,'
+                output += f'"time":{round(wtime, 3)},'
+                output += f'"dlink":"./files/{url(basename(file)[:-4])}"'
             except Exception as e:
-                print(f'"status":false')
-        print('}')
+                output += f'"status":false'
+        output += '}'
+    print(output)
 
 
 if __name__ == '__main__':

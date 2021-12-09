@@ -58,22 +58,25 @@ $('form').on('submit', function submit(e) {
 		dataType: 'json',
 		data: form,
 		success: function (resp) {
-			if (resp.status) {
-				$('.process').css('display', 'none')
-				$('.complete').css('display', 'block')
+			if (resp===null) {
+				$('.process').css('display', 'none');
+				$('.error').css('display', 'block');
+			} else if (resp.status) {
+				$('.process').css('display', 'none');
+				$('.complete').css('display', 'block');
 				if ($('#mode').val() == 'compress') {
 					$('.complete .status').html(
 						`Original size:&nbsp;&nbsp;&nbsp;${resp.origSize} B<br>Compressed size: ${resp.compSize} B<br>Time:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;${resp.time} s`
-					)
+					);
 				} else {
 					$('.complete .status').html(
 						`Compressed size: ${resp.compSize} B<br>Original size:&nbsp;&nbsp;&nbsp;${resp.origSize} B<br>Time:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;${resp.time} s`
-					)
+					);
 				}
-				$('#dlink').attr('href', resp.dlink)
+				$('#dlink').attr('href', resp.dlink);
 			} else {
-				$('.process').css('display', 'none')
-				$('.error').css('display', 'block')
+				$('.process').css('display', 'none');
+				$('.error').css('display', 'block');
 			};
 		},
 	});
