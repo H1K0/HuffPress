@@ -54,36 +54,53 @@ def huffman(data):
     return codes
 
 
-def nanako_encode(table):
+def shichiro_encode(table):
     table = ';'.join([f'{k};{table[k]}' for k in table]).split(';')
-    byts = []
+    bits = ''
     for i in range(len(table)):
         if i % 2:
-            num = table[i]
+            code = table[i]
+            bitlen = bin(len(code))[2:]
+            if len(bitlen) > 7:
+                while len(bitlen) > 7:
+                    bits += '1' + bitlen[:7]
+                    bitlen = bitlen[7:]
+                bits += bitlen.rjust(8, '0') + bin(len(bitlen))[2:].rjust(8, '0')
+            else:
+                bits += bitlen.rjust(8, '0')
+            bits += code
         else:
-            num = bin(int(table[i]))[2:]
-        while len(num) > 7:
-            byts.append(int('1' + num[:7], 2))
-            num = num[7:]
-        byts.append(int(num, 2))
-        byts.append(8 - len(num))
-    return byts
+            bits += bin(int(table[i]))[2:].rjust(8, '0')
+            continue
+    return bits
 
 
-def nanako_decode(byts):
+def shichiro_decode(byts):
+    bits=''.join(byts)
     dec = []
     table = {}
     stack = ''
     i = 0
-    while i < len(byts):
-        if byts[i][0] == '1':
-            stack += byts[i][1:]
+    c = 0
+    while i < len(bits) and len(bits) - i >= 8:
+        if c % 2 == 0:
+            dec.append(bits[i:i+8])
+            i += 8
+            c += 1
+            continue
+        bitlen = ''
+        if bits[i] == '0':
+            bitlen = int(bits[i:i+8], 2)
+            i += 8
         else:
-            stack += byts[i][int(byts[i + 1], 2):]
-            dec.append(stack[:])
-            stack = ''
-            i += 1
-        i += 1
+            while bits[i] == '1':
+                bitlen += bits[i+1:i+8]
+                i += 8
+            bitlen = int(bitlen + bits[i+8-int(bits[i+8:i+16], 2):i+8], 2)
+            i += 16
+        dec.append(bits[i:i+bitlen])
+        i += bitlen
+        c += 1
     for i in range(0, len(dec), 2):
         table[dec[i + 1]] = int(dec[i], 2)
     return table
@@ -96,23 +113,23 @@ def compress_file(filename):
     log.log(f'Original size: {len(data)} bytes.')
     log.log('Creating Huffman table...')
     hf = huffman(data)
-    table = nanako_encode(hf)
+    table = shichiro_encode(hf)
     log.log('Embedding Huffman table...')
-    out = []
-    ln = bin(len(table))[2:]  # embed the table
-    while len(ln) > 7:
-        out.append(int('1' + ln[:7], 2))
-        ln = ln[7:]
-    out += [int(ln, 2), 8 - len(ln)] + table
-    log.log(f'Huffman table size: {len(out)} bytes.')
+    tablen = bin(len(table))[2:]  # embed the table
+    bits = ''
+    bitlen = bin(len(tablen))[2:]
+    while len(bitlen) > 7:
+        bits += '1' + bitlen[:7]
+        bitlen = bitlen[7:]
+    bits += bitlen.rjust(8, '0') + bin(len(bitlen))[2:].rjust(8, '0') + tablen + table
+    log.log(f'Huffman table size: {len(bits)} bits.')
     log.log('Compressing...')
-    stack = ''
     for i in range(len(data)):  # encode to Haffman
-        stack += hf[data[i]]
-        while len(stack) >= 8:
-            out.append(int(stack[:8], 2))
-            stack = stack[8:]
-    out += [int(stack.ljust(8, '0'), 2), len(stack)]
+        bits += hf[data[i]]
+    out = []
+    for i in range(0, len(bits), 8):
+        out.append(int(bits[i:i+8].ljust(8, '0'), 2))
+    out.append(len(bits) % 8)
     log.log(f'Compressed size: {len(out)} bytes.')
     log.log(f"Saving to '{filename}.hfm'...")
     with open(f'{filename}.hfm', 'wb') as file:  # save Haffman code
@@ -130,19 +147,21 @@ def decompress_file(filename):
         data[-2] = data[-2][:int(data[-1], 2)]
         del data[-1]
     log.log('Extracting Huffman table...')
-    ln = ''  # extract the table
+    bitlen = ''  # extract the table
     i = 0
     while 1:
         if data[i][0] == '1':
-            ln += data[i][1:]
+            bitlen += data[i][1:]
         else:
-            ln += data[i][int(data[i + 1], 2):]
+            bitlen += data[i][int(data[i + 1], 2):]
             break
         i += 1
     del data[:i + 2]
-    table = nanako_decode(data[:int(ln, 2)])
-    del data[:int(ln, 2)]
     data = ''.join(data)
+    bitlen = int(bitlen, 2)
+    tablen = int(data[:bitlen], 2)
+    table = shichiro_decode(data[bitlen:tablen+bitlen])
+    data = data[bitlen+tablen:]
     stack = ''
     out = []
     log.log('Decompressing...')
