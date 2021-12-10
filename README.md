@@ -14,3 +14,7 @@ Hey! This is a simple web-service called __HuffPress__. What it does? Well, actu
 ## So, how do I use it?
 
 I think it's too easy to explain the usage of this service, but anyway here's [a video guide](https://yadi.sk/i/aiy78bDaoKqoJQ 'Watch!').
+
+---
+
+<p align=center><i>&copy; Masahiko AMANO a.k.a. H1K0, 2020-2021</i></p>
