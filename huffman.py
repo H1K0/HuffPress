@@ -62,14 +62,7 @@ def shichiro_encode(table):
     for i in range(len(table)):
         if i % 2:
             code = table[i]
-            bitlen = bin(len(code))[2:]
-            if len(bitlen) > 7:
-                while len(bitlen) > 7:
-                    bits += '1' + bitlen[:7]
-                    bitlen = bitlen[7:]
-                bits += bitlen.rjust(8, '0') + bin(len(bitlen))[2:].rjust(8, '0')
-            else:
-                bits += bitlen.rjust(8, '0')
+            bits += bin(len(code))[2:].rjust(8,'0')
             bits += code
         else:
             bits += bin(int(table[i]))[2:].rjust(8, '0')
@@ -90,16 +83,8 @@ def shichiro_decode(byts):
             i += 8
             c += 1
             continue
-        bitlen = ''
-        if bits[i] == '0':
-            bitlen = int(bits[i:i+8], 2)
-            i += 8
-        else:
-            while bits[i] == '1':
-                bitlen += bits[i+1:i+8]
-                i += 8
-            bitlen = int(bitlen + bits[i+8-int(bits[i+8:i+16], 2):i+8], 2)
-            i += 16
+        bitlen = int(bits[i:i+8], 2)
+        i += 8
         dec.append(bits[i:i+bitlen])
         i += bitlen
         c += 1
