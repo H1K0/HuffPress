@@ -88,3 +88,19 @@ $('.closebtn').click(function () {
 	$('.error').css('display', 'none');
 	$('.complete').css('display', 'none');
 });
+
+$(window).on('load', function() {
+	let msg = 'И что это мы тут забыли?\nА ну кыш отседова!\nНашлись тут кулхацкеры понимаешь!';
+	let style = [
+		'padding: 1rem;',
+		'font-family: monospace;',
+		'font-size: 18pt;',
+	].join('');
+	console.log('%c%s', style, msg);
+	$.ajax({
+		url: './images/angry_huffman',
+		success: function(data) {
+			console.image(data);
+		},
+	});
+});

@@ -4,6 +4,8 @@
 
 Hey! This is a simple web-service called __HuffPress__. What it does? Well, actually it _huffpresses_ files... I mean, compresses files using the [Huffman compression](https://en.wikipedia.org/wiki/Huffman_coding 'Read about it on Wikipedia').
 
+Also it uses a bit modified [SHICHIRO coding](https://github.com/H1K0/SHICHIRO 'View on GitHub') for compressing and embedding Huffman table.
+
 ## What do I need?
 
 - Any web browser
@@ -13,7 +15,7 @@ Hey! This is a simple web-service called __HuffPress__. What it does? Well, actu
 
 ## So, how do I use it?
 
-I think it's too easy to explain the usage of this service, but anyway here's [a video guide](https://yadi.sk/i/aiy78bDaoKqoJQ 'Watch!').
+I think the usage is too easy to explain it, but anyway here's [a video guide](https://yadi.sk/i/aiy78bDaoKqoJQ 'Watch!').
 
 ---
 
